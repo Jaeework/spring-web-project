@@ -27,6 +27,9 @@ dependencies {
   testImplementation 'org.springframework:spring-test:5.3.31'
   implementation 'org.springframework:spring-webmvc:5.3.31'
   testImplementation 'junit:junit:4.13.1'
+  implementation 'org.springframework:spring-jdbc:5.3.32'
+
+  implementation 'com.mysql:mysql-connector-j:8.0.33'
 
 
   /* lombok */
