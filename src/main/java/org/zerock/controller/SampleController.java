@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.zerock.domain.SampleDTO;
+import org.zerock.domain.SampleDTOList;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,6 +16,15 @@ import java.util.Arrays;
 @RequestMapping("/sample/*")
 @Log4j2
 public class SampleController {
+
+    /* 여러 개의 객체 타입을 처리하는 경우 */
+    @GetMapping("/ex02Bean")
+    public String ex02Bean(SampleDTOList list) {
+
+        log.info("list dtos : " + list);
+
+        return "ex02Bean";
+    }
 
     /* 동일한 이름의 파라미터가 여러 개 전달되는 경우 : 리스트, 배열 처리 */
     @GetMapping("/ex02List")
