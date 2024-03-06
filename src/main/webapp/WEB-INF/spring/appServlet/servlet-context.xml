@@ -16,4 +16,14 @@
         <property name="suffix" value=".jsp" />
     </bean>
 
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="utf-8"></property>
+        <!-- 1024 * 1024 * 10 bytes 10MB -->
+        <property name="maxUploadSize" value="104857560"></property>
+        <!-- 1024 * 1024 * 2 bytes 2MB -->
+        <property name="maxUploadSizePerFile" value="104857560"></property>
+        <property name="uploadTempDir" value="file:/C:/upload/temp"></property>
+        <property name="maxInMemorySize" value="104857560"></property>
+    </bean>
+
 </beans>
