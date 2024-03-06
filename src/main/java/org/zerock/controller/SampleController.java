@@ -18,6 +18,16 @@ import java.util.Arrays;
 @Log4j2
 public class SampleController {
 
+    /* view 로 데이터 전달 : 객체 타입과 기본 자료형의 비교 */
+    @GetMapping("/ex04")
+    public String ex04(SampleDTO dto, @ModelAttribute("page") int page) {
+
+        log.info("dto : " + dto);
+        log.info("page : " + page);
+
+        return "/sample/ex04";
+    }
+
     /* 파라미터를 변환해서 처리해야 하는 경우 ex) Date 타입 */
     @InitBinder
     public void initBinder(WebDataBinder binder) {
