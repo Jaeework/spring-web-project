@@ -53,6 +53,9 @@ dependencies {
   /* JDBC log*/
   implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
 
+  /* JSON 데이터 */
+  implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.1'
+
   compileOnly('javax.servlet:javax.servlet-api:4.0.1')
 
   testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")

@@ -18,6 +18,16 @@ import java.util.Arrays;
 @Log4j2
 public class SampleController {
 
+    @GetMapping("/ex06")
+    public @ResponseBody SampleDTO ex06() {
+        log.info("/ex06..........");
+        SampleDTO dto = new SampleDTO();
+        dto.setAge(10);
+        dto.setName("홍길동");
+
+        return dto;
+    }
+
     /* view 로 데이터 전달 : 객체 타입과 기본 자료형의 비교 */
     @GetMapping("/ex04")
     public String ex04(SampleDTO dto, @ModelAttribute("page") int page) {
