@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.zerock.domain.SampleDTO;
 import org.zerock.domain.SampleDTOList;
 import org.zerock.domain.TodoDTO;
@@ -20,6 +21,23 @@ import java.util.Arrays;
 @RequestMapping("/sample/*")
 @Log4j2
 public class SampleController {
+
+    /* 파일 업로드 제출 후 처리 */
+    @PostMapping("/exUploadPost")
+    public void exUploadPost(ArrayList<MultipartFile> files) {
+
+        files.forEach(file -> {
+            log.info("------------------------------------");
+            log.info("name : " + file.getOriginalFilename());
+            log.info("size : " + file.getSize());
+        });
+    }
+
+    /* 파일 업로드 화면으로 이동 */
+    @GetMapping("/exUpload")
+    public void exUpload() {
+        log.info("/exUpload..........");
+    }
 
     @GetMapping("/ex07")
     public ResponseEntity<String> ex07() {
