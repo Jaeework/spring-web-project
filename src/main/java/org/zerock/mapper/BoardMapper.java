@@ -15,8 +15,10 @@ public interface BoardMapper {
 
     public void insertSelectKey(BoardVO board);
 
-    /* read(select) 처리 */
+    /* read(select) */
     public BoardVO read(Long bno);
 
+    /* delete */
+    public int delete(Long bno);
 
 }
