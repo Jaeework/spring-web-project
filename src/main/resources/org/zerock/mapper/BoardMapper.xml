@@ -9,4 +9,21 @@
         select * from tbl_board where bno > 0
         ]]>
     </select>
+
+    <insert id="insert">
+        insert into tbl_board (title, content, writer)
+        values (#{title}, #{content}, #{writer})
+    </insert>
+
+    <insert id="insertSelectKey">
+        insert into tbl_board (title, content, writer)
+        values (#{title}, #{content}, #{writer})
+
+        <selectKey keyProperty="bno" order="AFTER"
+            resultType="long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+
+    </insert>
+
 </mapper>
