@@ -21,4 +21,7 @@ public interface BoardMapper {
     /* delete */
     public int delete(Long bno);
 
+    /* update */
+    public int update(BoardVO board);
+
 }
