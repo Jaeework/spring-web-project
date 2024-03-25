@@ -13,7 +13,10 @@
                 <!-- DataTales Example -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Board List Page</h6>
+                        <h6 class="m-0 font-weight-bold text-primary float-left">Board List Page</h6>
+                        <button id="regBtn" type="button" class="btn btn-sm float-right">
+                            Register New Board
+                        </button>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -89,6 +92,10 @@
 
            $('#myModal').modal("show");
        }
+
+       $('#regBtn').on("click", function() {
+          self.location = "/board/register";
+       });
 
     });
 </script>
