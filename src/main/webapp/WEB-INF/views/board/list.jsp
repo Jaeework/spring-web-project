@@ -41,6 +41,26 @@
                                     </c:forEach>
                                 </tbody>
                             </table>
+
+                            <!-- Modal 추가 -->
+                            <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+                                aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                aria-hidden="true">&times;</button>
+                                            <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                                        </div>
+                                        <div class="modal-body">처리가 완료되었습니다.</div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -50,6 +70,28 @@
 
         </div>
         <!-- End of Main Content -->
+
+<script type="text/javascript">
+    $(document).ready(function(){
+
+       var result = '<c:out value="${result}"/>';
+
+       checkModal(result);
+
+       function checkModal(result) {
+           if(result === '') {
+               return;
+           }
+
+           if(parseInt(result) > 0) {
+               $(".modal-body").html("게시글 " + parseInt(result) + " 번이 등록되었습니다.");
+           }
+
+           $('#myModal').modal("show");
+       }
+
+    });
+</script>
 
         <!-- Footer -->
 <%@include file="../includes/footer.jsp"%>
