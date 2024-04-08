@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.zerock.domain.BoardVO;
+import org.zerock.domain.Criteria;
+
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/spring/root-context.xml")
@@ -20,6 +23,19 @@ public class BoardMapperTests {
     @Test
     public void testGetlist() {
         mapper.getList().forEach(board -> log.info(board));
+    }
+
+    @Test
+    public void testPaging() {
+        Criteria cri = new Criteria();
+
+        // 10개씩 3페이지
+        cri.setPageNum(3);
+        cri.setAmount(10);
+
+        List<BoardVO> list = mapper.getListWithPaging(cri);
+
+        list.forEach(board -> log.info(board));
     }
 
     @Test
