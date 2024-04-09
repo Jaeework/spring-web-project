@@ -1,5 +1,10 @@
 package org.zerock.domain;
 
+import lombok.Getter;
+import lombok.ToString;
+
+@Getter
+@ToString
 public class PageDTO {
 
     private int startPage;
@@ -18,7 +23,7 @@ public class PageDTO {
 
         int realEnd = (int) (Math.ceil(total * 1.0 / cri.getAmount()));
 
-        if (realEnd < endPage) {
+        if (realEnd < this.endPage) {
             this.endPage = realEnd;
         }
 
