@@ -14,6 +14,9 @@ public interface BoardMapper {
     /* select list with paging */
     public List<BoardVO> getListWithPaging(Criteria cri);
 
+    /* select total count */
+    public int getTotalCount(Criteria cri);
+
     /* create(insert) */
     public void insert(BoardVO board);
 
