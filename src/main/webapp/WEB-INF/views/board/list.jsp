@@ -67,6 +67,7 @@
                             </div>
                         </div>
 
+                        <!-- paging -->
                         <div class="row">
                             <div class="col-sm-12 col-md-5">
                                 <div class="dataTables_info" id="dataTable_info" role="status" aria-live="polite"></div>
@@ -76,24 +77,31 @@
                                     <ul class="pagination">
                                         <c:if test="${pageMaker.prev}">
                                             <li class="paginate_button page-item previous" id="dataTable_previous">
-                                                <a href="#" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
+                                                <a href="${pageMaker.startPage - 1}" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
                                             </li>
                                         </c:if>
 
                                         <c:forEach var="num" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
-                                            <li class="paginate_button page-item">
-                                                <a href="#" aria-controls="dataTable" data-dt-idx="${num}" tabindex="0" class="page-link">${num}</a>
+                                            <li class="paginate_button page-item ${pageMaker.cri.pageNum == num ? "active" : ""}">
+                                                <a href="${num}" class="page-link"
+                                                   aria-controls="dataTable" data-dt-idx="${num}" tabindex="0">${num}</a>
                                             </li>
                                         </c:forEach>
 
                                         <c:if test="${pageMaker.next}">
                                             <li class="paginate_button page-item next" id="dataTable_next">
-                                                <a href="#" aria-controls="dataTable" data-dt-idx="${pageMaker.endPage + 1}" tabindex="0" class="page-link">Next</a></li>
+                                                <a href="${pageMaker.endPage + 1}" aria-controls="dataTable" data-dt-idx="${pageMaker.endPage + 1}" tabindex="0" class="page-link">Next</a></li>
                                         </c:if>
                                     </ul>
                                 </div>
                             </div>
                         </div>
+
+                        <!-- paging form -->
+                        <form action="/board/list" method="get" id="actionForm">
+                            <input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}">
+                            <input type="hidden" name="amount" value="${pageMaker.cri.amount}">
+                        </form>
 
                     </div>
                 </div>
@@ -128,6 +136,19 @@
        $('#regBtn').on("click", function() {
           self.location = "/board/register";
        });
+
+       // paging
+        var actionForm = $("#actionForm");
+
+        $(".paginate_button a").on("click", function(e) {
+
+            e.preventDefault();
+
+           console.log('click');
+
+           actionForm.find("input[name='pageNum']").val($(this).attr("href"));
+           actionForm.submit();
+        });
 
     });
 </script>
