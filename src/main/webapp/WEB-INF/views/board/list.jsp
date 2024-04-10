@@ -67,11 +67,46 @@
                             </div>
                         </div>
 
-                        <!-- paging -->
+
                         <div class="row">
+                            <!-- search -->
                             <div class="col-sm-12 col-md-5">
-                                <div class="dataTables_info" id="dataTable_info" role="status" aria-live="polite"></div>
+                                <div class="dataTables_info" id="dataTable_info" role="status" aria-live="polite">
+                                    <form id="searchForm" action="/board/list" method="get"
+                                            class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                                        <div class="input-group">
+                                            <select name="type" class="form-control form-select">
+                                                <option value=""
+                                                        <c:out value="${pageMaker.cri.type == null ? 'selected' : ''}"/>>--</option>
+                                                <option value="T"
+                                                        <c:out value="${pageMaker.cri.type eq 'T' ? 'selected' : ''}"/>>제목</option>
+                                                <option value="C"
+                                                        <c:out value="${pageMaker.cri.type eq 'C' ? 'selected' : ''}"/>>내용</option>
+                                                <option value="W"
+                                                        <c:out value="${pageMaker.cri.type eq 'W' ? 'selected' : ''}"/>>작성자</option>
+                                                <option value="TC"
+                                                        <c:out value="${pageMaker.cri.type eq 'TC' ? 'selected' : ''}"/>>제목 or 내용</option>
+                                                <option value="TW"
+                                                        <c:out value="${pageMaker.cri.type eq 'TW' ? 'selected' : ''}"/>>제목 or 작성자</option>
+                                                <option value="TCW"
+                                                        <c:out value="${pageMaker.cri.type eq 'TCW' ? 'selected' : ''}"/>>제목 or 내용 or 작성자</option>
+                                            </select>
+                                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                                                   aria-label="Search" aria-describedby="basic-addon2" name="keyword"
+                                                   value='<c:out value="${pageMaker.cri.keyword}" />'>
+                                            <input type="hidden" name="pageNum" value='<c:out value="${pageMaker.cri.pageNum}" />'>
+                                            <input type="hidden" name="amount" value='<c:out value="${pageMaker.cri.amount}" />'>
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary" type="button">
+                                                    <i class="fas fa-search fa-sm"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
+
+                            <!-- paging -->
                             <div class="col-sm-12 col-md-7">
                                 <div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
                                     <ul class="pagination">
@@ -148,6 +183,28 @@
 
            actionForm.find("input[name='pageNum']").val($(this).attr("href"));
            actionForm.submit();
+        });
+
+        // search
+        var searchForm = $("#searchForm");
+
+        $("#searchForm button").on("click", function(e) {
+
+            if(!searchForm.find("option:selected").val()) {
+                alert("검색 종류를 선택하세요");
+                return false;
+            }
+
+            if(!searchForm.find("input[name='keyword']").val()) {
+                alert("키워드를 입력하세요.");
+                return false;
+            }
+
+            searchForm.find("input[name='pageNum']").val("1");
+            e.preventDefault();
+
+            searchForm.submit();
+
         });
 
         // 조회 페이지 이동
