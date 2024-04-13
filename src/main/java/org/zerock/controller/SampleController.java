@@ -9,10 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.zerock.domain.SampleDTO;
-import org.zerock.domain.SampleDTOList;
-import org.zerock.domain.SampleVO;
-import org.zerock.domain.TodoDTO;
+import org.zerock.domain.*;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -81,6 +78,22 @@ public class SampleController {
         }
 
         return result;
+    }
+
+    @GetMapping("/product/{cat}/{pid}")
+    public String[] getPath(@PathVariable("cat") String cat,
+                            @PathVariable("pid") String pid) {
+
+        return new String[] { "category : " + cat , "productid : " + pid };
+    }
+
+    @PostMapping("/ticket")
+    public Ticket convert(@RequestBody Ticket ticket) {
+
+        log.info("convert.......ticket" + ticket);
+
+        return ticket;
+
     }
 
     /* 파일 업로드 제출 후 처리 */
