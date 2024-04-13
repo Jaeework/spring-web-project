@@ -36,6 +36,38 @@ public class ReplyMapperTests {
     }
 
     @Test
+    public void testRead() {
+
+        Long targetRno = 5L;
+
+        ReplyVO vo = mapper.read(targetRno);
+
+        log.info(vo);
+    }
+
+    @Test
+    public void testDelete() {
+
+        Long targetRno = 1L;
+
+        mapper.delete(targetRno);
+    }
+
+    @Test
+    public void testUpdate() {
+
+        Long targetRno = 10L;
+
+        ReplyVO vo = mapper.read(targetRno);
+
+        vo.setReply("Update reply");
+
+        int count = mapper.update(vo);
+
+        log.info("UPDATE COUNT : " + count);
+    }
+
+    @Test
     public void testMapper() {
 
         log.info(mapper);
