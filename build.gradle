@@ -50,11 +50,13 @@ dependencies {
   implementation 'org.apache.logging.log4j:log4j-core:2.22.1'
   implementation 'org.apache.logging.log4j:log4j-api:2.22.1'
 
-  /* JDBC log*/
+  /* JDBC log */
   implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
 
   /* JSON 데이터 */
   implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.1'
+  implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.16.1'
+  implementation 'com.google.code.gson:gson:2.10.1'
 
   /* commons-fileupload 를 이용한 파일 업로드 */
   implementation 'commons-fileupload:commons-fileupload:1.5'
