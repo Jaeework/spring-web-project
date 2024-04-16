@@ -59,6 +59,7 @@
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">
                 <i class="fa fa-comments fa-fw"></i> Reply
+                <button id="addReplyBtn" class="btn btn-primary btn-xs float-right">New Reply</button>
             </h6>
         </div>
         <div class="card-body">
@@ -79,6 +80,43 @@
 
         </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+        aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">REPLY MODAL</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Reply</label>
+                        <input type="text" name="reply" class="form-control" value="New Reply!!!!">
+                    </div>
+                    <div class="form-group">
+                        <label>Replyer</label>
+                        <input type="text" name="replyer" class="form-control" value="replyer">
+                    </div>
+                    <div class="form-group">
+                        <label>Reply Date</label>
+                        <input name="replyDate" class="form-control" value="">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="modalModBtn" class="btn btn-warning" type="button">Modify</button>
+                    <button id="modalRemoveBtn" class="btn btn-danger" type="button">Remove</button>
+                    <button id="modalRegisterBtn" class="btn btn-primary" type="button">Register</button>
+                    <button id="modalCloseBtn" class="btn btn-default" data-dismiss="modal" type="button">Close</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.Modal -->
 
 </div>
 <!-- /.container-fluid -->
@@ -113,60 +151,47 @@
 
                 replyUL.html(str);
             });
-        }
-    });
-</script>
+        } // end showList
 
-<script type="text/javascript">
-    $(document).ready(function() {
+        // modal
+        var modal = $(".modal");
+        var modalInputReply = modal.find("input[name='reply']");
+        var modalInputReplyer = modal.find("input[name='replyer']");
+        var modalInputReplyDate = modal.find("input[name='replyDate']");
 
-        console.log("=================");
-        console.log("JS TEST");
+        var modalModBtn = $("#modalModBtn");
+        var modalRemoveBtn = $("#modalRemoveBtn");
+        var modalRegisterBtn = $("#modalRegisterBtn");
 
-        var bnoValue = '<c:out value="${board.bno}" />'
+        $("#addReplyBtn").on("click", function (e) {
 
-        //for replyService add test
-        replyService.add(
-            {reply : "JS Test", replyer : "tester", bno: bnoValue},
-            function (result) {
-                alert("RESULT : " + result);
-            }
-        );
+            modal.find("input").val("");
+            modalInputReplyDate.closest("div").hide();
+            modal.find("button[id != 'modalCloseBtn']").hide();
 
-        // reply List Test
-        replyService.getList({bno:bnoValue, page:1}, function (list) {
+            modalRegisterBtn.show();
 
-            for(var i = 0, len = list.length||0; i < len; i++) {
-                console.log(list[i]);
-            }
+            $(".modal").modal("show");
         });
 
-        // 32번 댓글 삭제 테스트
-        replyService.remove(32, function(count) {
+        modalRegisterBtn.on("click", function (e) {
 
-            console.log(count);
+            var reply = {
+                reply : modalInputReply.val(),
+                replyer : modalInputReplyer.val(),
+                bno:bnoValue
+            };
+            replyService.add(reply, function(result) {
 
-            if(count === "success") {
-                alert("REMOVED");
-            }
-        }, function (err) {
-            alert("ERROR...");
+                alert(result);
+
+                modal.find("input").val("");
+                modal.modal("hide");
+
+                showList(1);
+            });
         });
 
-        // 11번 댓글 수정
-        replyService.update({
-            rno : 11,
-            bno : bnoValue,
-            reply : "Modified reply....."
-        }, function (result) {
-
-            alert("수정 완료...");
-        });
-
-        // get 확인
-        replyService.get(33, function(data) {
-            console.log(data);
-        })
 
     });
 </script>
