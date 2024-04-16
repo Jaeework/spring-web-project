@@ -106,6 +106,11 @@
             alert("수정 완료...");
         });
 
+        // get 확인
+        replyService.get(33, function(data) {
+            console.log(data);
+        })
+
     });
 </script>
 
