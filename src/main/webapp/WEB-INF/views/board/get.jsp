@@ -55,10 +55,67 @@
     </div>
   </div>
 
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">
+                <i class="fa fa-comments fa-fw"></i> Reply
+            </h6>
+        </div>
+        <div class="card-body">
+
+            <ul class="chat" style="padding-left: 0;">
+                <!-- start reply -->
+                <li class="left clearfix" data-rno="12" style="list-style: none;">
+                    <div>
+                        <div class="header">
+                            <strong class="primary-font">user00</strong>
+                            <small class="float-right text-muted">2018-01-01 13:00</small>
+                        </div>
+                        <p>Good job!</p>
+                    </div>
+                </li>
+                <!-- end reply -->
+            </ul>
+
+        </div>
+    </div>
+
 </div>
 <!-- /.container-fluid -->
 
 <script type="text/javascript" src="/resources/js/reply.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        var bnoValue = '<c:out value="${board.bno}"/>';
+        var replyUL = $(".chat");
+
+        showList(1);
+
+        function showList(page) {
+
+            replyService.getList({bno:bnoValue, page:page||1}, function (list) {
+
+                var str = "";
+                if(list == null || list.length == 0) {
+                    replyUL.html("");
+
+                    return;
+                }
+                for(var i = 0, len = list.length || 0; i < len; i++) {
+                    str += "<li class='left clearfix' data-rno='" + list[i].rno + "' style='list-style: none;'>"
+                        + "<div><div class='header'><strong class='primary-font'>" + list[i].replyer +"</strong>"
+                        + "<small class='float-right text-muted'>" + replyService.displayTime(list[i].replyDate)
+                        + "</small></div>"
+                        + "<p>" + list[i].reply + "</p></div></li>";
+                }
+
+                replyUL.html(str);
+            });
+        }
+    });
+</script>
 
 <script type="text/javascript">
     $(document).ready(function() {
