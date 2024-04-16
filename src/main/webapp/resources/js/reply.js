@@ -2,7 +2,7 @@ console.log("Reply Module........");
 
 var replyService = (function(){
 
-    function add(reply, callback) {
+    function add(reply, callback, error) {
         console.log("reply.........");
 
         $.ajax({
@@ -23,8 +23,27 @@ var replyService = (function(){
         });
     }
 
+    function getList(param, callback, error) {
+
+        var bno = param.bno;
+
+        var page = param.page || 1;
+
+        $.getJSON("/replies/pages/" + bno + "/" + page ,
+            function(data) {
+                if(callback) {
+                    callback(data);
+                }
+            }).fail(function(xhr, status, err) {
+                if(error) {
+                    error();
+                }
+        });
+    }
+
     return{
-        add:add
+        add:add,
+        getList:getList
     };
 
 })();
