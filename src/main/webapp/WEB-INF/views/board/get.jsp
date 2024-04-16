@@ -96,6 +96,16 @@
             alert("ERROR...");
         });
 
+        // 11번 댓글 수정
+        replyService.update({
+            rno : 11,
+            bno : bnoValue,
+            reply : "Modified reply....."
+        }, function (result) {
+
+            alert("수정 완료...");
+        });
+
     });
 </script>
 
