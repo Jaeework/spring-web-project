@@ -84,6 +84,18 @@
             }
         });
 
+        // 32번 댓글 삭제 테스트
+        replyService.remove(32, function(count) {
+
+            console.log(count);
+
+            if(count === "success") {
+                alert("REMOVED");
+            }
+        }, function (err) {
+            alert("ERROR...");
+        });
+
     });
 </script>
 
