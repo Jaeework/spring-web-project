@@ -31,10 +31,16 @@
 
     <select id="getListWithPaging" resultType="org.zerock.domain.ReplyVO">
 
+        <![CDATA[
         select rno, bno, reply, replyer, replyDate, updateDate
-        from tbl_reply
-        where bno = #{bno}
-        order by rno asc
+        from (
+            select /*+INDEX(tbl_reply idx_reply) */
+                @rownum := @rownum + 1 as rn, bno, rno, reply, replyer, replyDate, updateDate
+                from tbl_reply, (select @rownum := 0) rn_tb
+                where bno = #{bno}
+                and @rownum <= ( #{cri.pageNum} * #{cri.amount} -1 )
+            ) ordered_tb where rn > (#{cri.pageNum} - 1) * #{cri.amount} and rno > 0
+        ]]>
 
     </select>
 
