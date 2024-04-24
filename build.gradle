@@ -66,6 +66,9 @@ dependencies {
   /* commons-fileupload 를 이용한 파일 업로드 */
   implementation 'commons-fileupload:commons-fileupload:1.5'
 
+  /* 이미지 파일 썸네일 처리 */
+  implementation 'net.coobird:thumbnailator:0.4.20'
+
   /* jstl taglib 관련 */
   implementation 'org.apache.taglibs:taglibs-standard-spec:1.2.5'
   runtimeOnly 'org.apache.taglibs:taglibs-standard-impl:1.2.5'
