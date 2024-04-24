@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 @Controller
 @Log4j2
@@ -77,6 +78,10 @@ public class UploadController {
             // IE has file path
             uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\") + 1);
             log.info("only file name : " + uploadFileName);
+
+            UUID uuid = UUID.randomUUID();
+
+            uploadFileName = uuid.toString() + "_" + uploadFileName;
 
             //File saveFile = new File(uploadFolder, uploadFileName);
             File saveFile = new File(uploadPath, uploadFileName);
