@@ -7,38 +7,38 @@
 <!-- Begin Page Content -->
 <div class="container-fluid">
 
-  <!-- Page Heading -->
-  <h1 class="h3 mb-2 text-gray-800">Board Register</h1>
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Board Read</h1>
 
-  <!-- DataTales Example -->
-  <div class="card shadow mb-4">
+    <!-- Board Card -->
+    <div class="card shadow mb-4">
     <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary">Board Register</h6>
+      <h6 class="m-0 font-weight-bold text-primary">Board Read Page</h6>
     </div>
     <div class="card-body">
 
         <div class="form-group">
-          <label>Bno</label>
-          <input type="text" name="bno" readonly="readonly"
-                 value="<c:out value='${board.bno }' />" class="form-control">
+            <label>Bno</label>
+            <input type="text" name="bno" readonly="readonly"
+                   value="<c:out value='${board.bno }' />" class="form-control">
         </div>
 
         <div class="form-group">
-          <label>Title</label>
-          <input type="text" name="title" readonly="readonly"
-                 value="<c:out value='${board.title }' />" class="form-control">
+            <label>Title</label>
+            <input type="text" name="title" readonly="readonly"
+                   value="<c:out value='${board.title }' />" class="form-control">
         </div>
 
         <div class="form-group">
-          <label>Text area</label>
-          <textarea rows="3" name="content" class="form-control"
-                    readonly="readonly"><c:out value="${board.content }" /></textarea>
+            <label>Text area</label>
+            <textarea rows="3" name="content" class="form-control"
+                      readonly="readonly"><c:out value="${board.content }" /></textarea>
         </div>
 
         <div class="form-group">
-          <label>Writer</label>
-          <input type="text" name="writer" readonly="readonly"
-                 value="<c:out value='${board.writer}' />" class="form-control">
+            <label>Writer</label>
+            <input type="text" name="writer" readonly="readonly"
+                   value="<c:out value='${board.writer}' />" class="form-control">
         </div>
 
         <button data-oper="modify" class="btn btn-default">Modify</button>
@@ -55,6 +55,77 @@
     </div>
   </div>
 
+    <!-- Attachment Card -->
+    <div class="bigPictureWrapper">
+        <div class="bigPicture"></div>
+    </div>
+    <style>
+
+        .uploadResult {
+            width: 100%;
+            background-color: gray;
+        }
+
+        .uploadResult ul {
+            display: flex;
+            flex-flow: row;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .uploadResult ul li {
+            list-style: none;
+            padding: 10px;
+            align-content: center;
+            text-align: center;
+        }
+
+        .uploadResult ul li img {
+            width: 100px;
+        }
+
+        .uploadResult ul li span {
+            color: white;
+        }
+
+        .bigPictureWrapper {
+            position: absolute;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            top: 0%;
+            width: 100%;
+            height: 100%;
+            background-color: gray;
+            z-index: 100;
+            background: rgba(255,255,255,0.5);
+        }
+
+        .bigPicture {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bigPicture img {
+            width: 600px;
+        }
+
+    </style>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Files</h6>
+        </div>
+        <div class="card-body">
+            <div class="uploadResult">
+                <ul></ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reply Card -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">
@@ -114,6 +185,75 @@
 <!-- /.container-fluid -->
 
 <script type="text/javascript" src="/resources/js/reply.js"></script>
+
+<script>
+    $(document).ready(function () {
+
+        var bno = '<c:out value="${board.bno}" />';
+
+        $.getJSON("/board/getAttachList", {bno: bno}, function (arr) {
+            console.log(arr);
+
+            var str = "";
+
+            $(arr).each(function (i, attach){
+               //image type
+               if(attach.fileType) {
+                   var fileCallPath = encodeURIComponent(attach.uploadPath
+                                    + "/s_" + attach.uuid + "_" + attach.fileName);
+
+                   str += "<li data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' "
+                       +  "data-filename='" + attach.fileName + "' data-type='" + attach.fileType +"' ><div>";
+                   str += "<img src='/display?fileName=" + fileCallPath + "' />";
+                   str += "</div></li>";
+               } else {
+                   str += "<li data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' "
+                       +  "data-filename='" + attach.fileName + "' data-type='" + attach.fileType +"' ><div>";
+                   str += "<span>" + attach.fileName + "</span><br/>";
+                   str += "<img src='/resources/img/attach.png' />";
+                   str += "</div></li>";
+               }
+            });
+            $(".uploadResult ul").html(str);
+
+        }); // end getJson
+
+        $(".uploadResult").on("click", "li", function (e) {
+
+            console.log("view image");
+
+            var liObj = $(this);
+
+            var path = encodeURIComponent(liObj.data("path") + "/" + liObj.data("uuid") + "_" + liObj.data("filename"));
+
+            if(liObj.data("type")) {
+                showImage(path.replace(new RegExp(/\\/g), "/"));
+            } else {
+                // download
+                self.location = "/download?fileName=" + path;
+            }
+        });
+
+        function showImage(fileCallPath) {
+            alert(fileCallPath);
+
+            $(".bigPictureWrapper").css("display", "flex").show();
+
+            $(".bigPicture")
+                .html("<img src='/display?fileName=" + fileCallPath + "' />")
+                .animate({width:'100%', height: '100%'}, 1000);
+        }
+
+        $(".bigPictureWrapper").on("click", function (e) {
+           $(".bigPicture").animate({width:'0%', height: '0%'}, 1000);
+           setTimeout(function () {
+              $(".bigPictureWrapper").hide();
+           }, 1000);
+        });
+
+    }); // end function
+
+</script>
 
 <script type="text/javascript">
     $(document).ready(function() {
