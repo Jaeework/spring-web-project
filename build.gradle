@@ -74,6 +74,10 @@ dependencies {
   runtimeOnly 'org.apache.taglibs:taglibs-standard-impl:1.2.5'
   implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:2.0.0'
 
+  /* Quartz 관련 */
+  implementation 'org.quartz-scheduler:quartz:2.4.0-rc1'
+  implementation 'org.quartz-scheduler:quartz-jobs:2.4.0-rc1'
+
   implementation 'javax.servlet:javax.servlet-api:4.0.1'
 
   testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
