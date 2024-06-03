@@ -21,6 +21,24 @@ import java.util.stream.IntStream;
 @Log4j2
 public class SampleController {
 
+    @GetMapping("/all")
+    public void doAll() {
+
+        log.info("do all can access everybody");
+    }
+
+    @GetMapping("/member")
+    public void doMember() {
+
+        log.info("logined member");
+    }
+
+    @GetMapping("/admin")
+    public void doAdmin() {
+
+        log.info("admin only");
+    }
+
     // 단순 문자열 반환
     @GetMapping(value = "/getText", produces = "text/plain; charset=UTF-8")
     public String getText() {
