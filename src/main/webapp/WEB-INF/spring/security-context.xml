@@ -7,6 +7,7 @@
 
     <bean id="customAccessDenied" class="org.zerock.security.CustomAccessDeniedHandler"></bean>
     <bean id="customLoginSuccess" class="org.zerock.security.CustomLoginSuccessHandler"></bean>
+    <bean id="customPasswordEncoder" class="org.zerock.security.CustomNoOpPasswordEncoder"></bean>
 
     <security:http>
 
@@ -29,13 +30,18 @@
     <security:authentication-manager>
 
         <security:authentication-provider>
-            <security:user-service>
+            <!--<security:user-service>
 
                 <security:user name="member" password="{noop}member" authorities="ROLE_MEMBER" />
 
                 <security:user name="admin" password="{noop}admin" authorities="ROLE_MEMBER, ROLE_ADMIN" />
 
-            </security:user-service>
+            </security:user-service>-->
+
+            <security:jdbc-user-service data-source-ref="dataSource" />
+
+            <security:password-encoder ref="customPasswordEncoder" />
+
         </security:authentication-provider>
 
     </security:authentication-manager>
