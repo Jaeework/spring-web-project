@@ -5,6 +5,10 @@
 </head>
 <body>
 
+<script type="text/javascript">
+    self.location="/board/list";
+</script>
+
 <h1>Hello World!</h1>
 <h2>${serverTime}</h2>
 </body>
