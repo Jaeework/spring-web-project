@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <%@ include file="../includes/header.jsp"%>
 
@@ -17,6 +18,9 @@
     </div>
     <div class="card-body">
       <form role="form" action="/board/register" method="post">
+
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+
         <div class="form-group">
           <label>Title</label> <input type="text" name="title" class="form-control">
         </div>
@@ -26,7 +30,8 @@
         </div>
 
         <div class="form-group">
-          <label>Writer</label> <input type="text" name="writer" class="form-control">
+          <label>Writer</label> <input type="text" name="writer" class="form-control"
+                                       value="<sec:authentication property="principal.username" />" readonly="readonly" />
         </div>
 
         <button type="submit" class="btn btn-primary">Submit Button</button>
@@ -101,6 +106,9 @@
         return true;
       }
 
+      var csrfHeaderName = "${_csrf.headerName}";
+      var csrfTokenValue = "${_csrf.token}"
+
       $("input[type='file']").change(function (e) {
 
         var formData = new FormData();
@@ -123,6 +131,9 @@
           url: '/uploadAjaxAction',
           processData: false,
           contentType: false,
+          beforeSend: function(xhr) {
+            xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+          },
           data: formData,
           type: 'POST',
           dataType: 'json',
@@ -187,6 +198,9 @@
         $.ajax({
           url: '/deleteFile',
           data: {fileName: targetFile, type: type},
+          beforeSend: function(xhr) {
+            xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+          },
           dataType: 'text',
           type: 'POST',
           success: function(result) {

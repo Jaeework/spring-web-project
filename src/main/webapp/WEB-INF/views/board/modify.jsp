@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <%@ include file="../includes/header.jsp"%>
 
@@ -17,6 +18,8 @@
         </div>
         <div class="card-body">
             <form role="form" action="/board/modify" method="post">
+
+                <input type="hidden" name="${_csrf.parmeterName}" value="${_csrf.token}" />
 
                 <!-- criteria -->
                 <input type="hidden" id="pageNum" name="pageNum" value="<c:out value='${cri.pageNum}' />">
@@ -60,10 +63,19 @@
                            value="<fmt:formatDate pattern="yyyy/MM/dd" value='${board.updatedate}' />" class="form-control">
                 </div>
 
-                <button type="submit" data-oper="modify" class="btn btn-default"
+                <sec:authentication property="principal" var="pinfo" />
+
+                <sec:authorize access="isAuthenticated()">
+
+                    <c:if test="${pinfo.username eq board.writer}">
+                        <button type="submit" data-oper="modify" class="btn btn-default"
                         >Modify</button>
-                <button type="submit" data-oper="remove" class="btn btn-default"
-                >Remove</button>
+                        <button type="submit" data-oper="remove" class="btn btn-default"
+                        >Remove</button>
+                    </c:if>
+
+                </sec:authorize>
+
                 <button type="submit" data-oper="list" class="btn btn-info">List</button>
             </form>
         </div>
@@ -210,6 +222,9 @@
                 return true;
             }
 
+            var csrfHeaderName = "${_csrf.headerName}";
+            var csrfTokenValue = "${_csrf.token}";
+
             $("input[type='file']").change(function (e) {
 
                 var formData = new FormData();
@@ -233,6 +248,9 @@
                     processData: false,
                     contentType: false,
                     data: formData,
+                    beforeSend: function (xhr) {
+                      xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+                    },
                     type: 'POST',
                     dataType: 'json',
                     success: function(result) {

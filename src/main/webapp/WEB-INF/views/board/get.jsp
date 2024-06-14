@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <%@ include file="../includes/header.jsp"%>
 
@@ -41,7 +42,18 @@
                    value="<c:out value='${board.writer}' />" class="form-control">
         </div>
 
-        <button data-oper="modify" class="btn btn-default">Modify</button>
+        <sec:authentication property="principal" var="pinfo"/>
+
+        <sec:authorize access="isAuthenticated()">
+
+            <c:if test="${pinfo.username eq board.writer}">
+
+                <button data-oper="modify" class="btn btn-default">Modify</button>
+
+            </c:if>
+
+        </sec:authorize>
+
         <button data-oper="list" class="btn btn-info">List</button>
 
         <form id="operForm" action="board/modify" method="get">
@@ -130,7 +142,10 @@
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">
                 <i class="fa fa-comments fa-fw"></i> Reply
-                <button id="addReplyBtn" class="btn btn-primary btn-xs float-right">New Reply</button>
+
+                <sec:authorize access="isAuthenticated()">
+                    <button id="addReplyBtn" class="btn btn-primary btn-xs float-right">New Reply</button>
+                </sec:authorize>
             </h6>
         </div>
         <div class="card-body">
@@ -355,7 +370,7 @@
         });
 
         // modal
-        var modal = $(".modal");
+        var modal = $("#myModal");
         var modalInputReply = modal.find("input[name='reply']");
         var modalInputReplyer = modal.find("input[name='replyer']");
         var modalInputReplyDate = modal.find("input[name='replyDate']");
@@ -364,15 +379,32 @@
         var modalRemoveBtn = $("#modalRemoveBtn");
         var modalRegisterBtn = $("#modalRegisterBtn");
 
+        var replyer = null;
+
+        <sec:authorize access="isAuthenticated()">
+
+            replyer = '<sec:authentication property="principal.username" />';
+
+        </sec:authorize>
+
+        var csrfHeaderName = "${_csrf.headerName}";
+        var csrfTokenValue = "${_csrf.token}";
+
         $("#addReplyBtn").on("click", function (e) {
 
             modal.find("input").val("");
+            modal.find("input[name='replyer']").val(replyer);
             modalInputReplyDate.closest("div").hide();
             modal.find("button[id != 'modalCloseBtn']").hide();
 
             modalRegisterBtn.show();
 
-            $(".modal").modal("show");
+            $("#myModal").modal("show");
+        });
+
+        // Ajax spring security header...
+        $(document).ajaxSend(function(e, xhr, options) {
+           xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
         });
 
         modalRegisterBtn.on("click", function (e) {
@@ -410,14 +442,30 @@
                modalModBtn.show();
                modalRemoveBtn.show();
 
-               $(".modal").modal("show");
+               $("#myModal").modal("show");
             });
         });
 
         // 댓글 수정
         modalModBtn.on("click", function(e) {
 
-            var reply = {rno:modal.data("rno"), reply: modalInputReply.val()};
+            var originalReplyer = modalInputReplyer.val();
+
+            var reply = {rno:modal.data("rno"), reply: modalInputReply.val(), replyer: originalReplyer};
+
+            if(!replyer) {
+                alert("로그인 후 수정이 가능합니다.");
+                modal.modal("hide");
+                return;
+            }
+
+            console.log("Original Replyer : " + originalReplyer);
+
+            if(replyer != originalReplyer) {
+                alert("자신이 작성한 댓글만 수정이 가능합니다.");
+                modal.modal("hide");
+                return;
+            }
 
             replyService.update(reply, function (result) {
 
@@ -432,7 +480,26 @@
 
             var rno = modal.data("rno");
 
-            replyService.remove(rno, function(result) {
+            console.log("RNO : " + rno);
+            console.log("REPLYER : " + replyer);
+
+            if(!replyer) {
+                alert("로그인 후 삭제가 가능합니다.");
+                modal.modal("hide");
+                return;
+            }
+
+            var originalReplyer = modalInputReplyer.val();
+
+            console.log("Original Replyer : " + originalReplyer);
+
+            if(replyer != originalReplyer) {
+                alert("자신이 작성한 댓글만 삭제가 가능합니다.");
+                modal.modal("hide");
+                return;
+            }
+
+            replyService.remove(rno, originalReplyer, function(result) {
 
                 alert(result);
                 modal.modal("hide");

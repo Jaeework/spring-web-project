@@ -4,12 +4,6 @@
     <title>Title</title>
 </head>
 <body>
-
-<script type="text/javascript">
-    self.location="/board/list";
-</script>
-
-<h1>Hello World!</h1>
-<h2>${serverTime}</h2>
+    <h1>/sample/member page</h1>
 </body>
 </html>
