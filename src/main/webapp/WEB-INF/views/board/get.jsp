@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <%@ include file="../includes/header.jsp"%>
 
@@ -41,7 +42,18 @@
                    value="<c:out value='${board.writer}' />" class="form-control">
         </div>
 
-        <button data-oper="modify" class="btn btn-default">Modify</button>
+        <sec:authentication property="principal" var="pinfo"/>
+
+        <sec:authorize access="isAuthenticated()">
+
+            <c:if test="${pinfo.username eq board.writer}">
+
+                <button data-oper="modify" class="btn btn-default">Modify</button>
+
+            </c:if>
+
+        </sec:authorize>
+
         <button data-oper="list" class="btn btn-info">List</button>
 
         <form id="operForm" action="board/modify" method="get">
@@ -130,7 +142,10 @@
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">
                 <i class="fa fa-comments fa-fw"></i> Reply
-                <button id="addReplyBtn" class="btn btn-primary btn-xs float-right">New Reply</button>
+
+                <sec:authorize access="isAuthenticated()">
+                    <button id="addReplyBtn" class="btn btn-primary btn-xs float-right">New Reply</button>
+                </sec:authorize>
             </h6>
         </div>
         <div class="card-body">
