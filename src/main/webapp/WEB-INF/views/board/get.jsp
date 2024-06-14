@@ -370,7 +370,7 @@
         });
 
         // modal
-        var modal = $(".modal");
+        var modal = $("#myModal");
         var modalInputReply = modal.find("input[name='reply']");
         var modalInputReplyer = modal.find("input[name='replyer']");
         var modalInputReplyDate = modal.find("input[name='replyDate']");
@@ -399,7 +399,7 @@
 
             modalRegisterBtn.show();
 
-            $(".modal").modal("show");
+            $("#myModal").modal("show");
         });
 
         // Ajax spring security header...
@@ -442,7 +442,7 @@
                modalModBtn.show();
                modalRemoveBtn.show();
 
-               $(".modal").modal("show");
+               $("#myModal").modal("show");
             });
         });
 
